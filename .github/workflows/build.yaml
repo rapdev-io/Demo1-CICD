@@ -44,3 +44,12 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: trigger deploy
+        run: |
+          curl -X POST https://api.github.com/repos/rapdev-io/Demo1-CICD/actions/workflows/deploy.yml/dispatches \
+          -H 'Accept: application/vnd.github.everest-preview+json' \
+          -u ${{ secrets.GH_TOKEN }} \
+          --data '{"ref":"main","inputs":{"artifact_version": "1.${{ github.run_number }}.0"}}'
+      
